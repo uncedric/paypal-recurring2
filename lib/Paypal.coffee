@@ -18,7 +18,7 @@ util =        require 'util'
 # * https://www.x.com/developers/paypal/documentation-tools/api
 #
 class Paypal
-  
+
   constructor: (credentials, env) ->
     throw new Error "Missing username"  unless credentials.username
     throw new Error "Missing password"  unless credentials.password
@@ -76,7 +76,7 @@ class Paypal
       "PAYMENTREQUEST_0_AMT",
       "L_BILLINGAGREEMENTDESCRIPTION0"
     ]
-    
+
     for i in reqs
       throw new Error "Missing param " + i if !opts[i]
 
@@ -117,7 +117,7 @@ class Paypal
   # https://www.x.com/developers/paypal/documentation-tools/api/createrecurringpaymentsprofile-api-operation-nvp
   #
   createSubscription: (token, payerid, opts, callback) ->
-    
+
     self = @
 
     # Check for required arguments and params and throw error(s) if they aren't available
@@ -145,9 +145,9 @@ class Paypal
 
     # Format the date
     opts["PROFILESTARTDATE"] = @_formatDate(opts["PROFILESTARTDATE"])
-    
+
     @makeAPIrequest @getParams(opts), (err, response) ->
-      
+
       return callback err, null if err
 
       return callback err ? true, null if response["ACK"] isnt "Success"
@@ -169,7 +169,7 @@ class Paypal
   # https://www.x.com/developers/paypal/documentation-tools/api/getrecurringpaymentsprofiledetails-api-operation-nvp
   #
   getSubscription: (id, callback) ->
-    
+
     # Ensure that we have a profile ID
     throw new Error "Missing profile id" unless id
 
@@ -179,12 +179,11 @@ class Paypal
     )
 
     @makeAPIrequest params, (err, response) ->
-      
-      return callback err, null if err
 
-      return callback err ? true, null if response["ACK"] isnt "Success"
-
-      callback err, response
+      if response['ACK'] is 'Failure'
+        callback response['L_LONGMESSAGE0']
+      else
+        callback null, response
 
   # Modifies the state of an existing subscription by invoking the
   # ManageRecurringPaymentsProfileStatus on the PayPal API.
@@ -200,10 +199,10 @@ class Paypal
   # https://www.x.com/developers/paypal/documentation-tools/api/managerecurringpaymentsprofilestatus-api-operation-nvp
   #
   modifySubscription: (id, action, note, callback) ->
-    
+
     # Ensure that we have a profile ID
     throw new Error "Missing profile id" unless id
-    
+
     args =     Array::slice.call(arguments)
     callback = args[args.length-1]
 
@@ -220,7 +219,7 @@ class Paypal
     params["NOTE"] = note if typeof note is "string"
 
     @makeAPIrequest params, (err, response) ->
-      
+
       return callback err, null if err
 
       return callback err ? true, null if response["ACK"] isnt "Success"
