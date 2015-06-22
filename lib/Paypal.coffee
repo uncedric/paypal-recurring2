@@ -148,11 +148,10 @@ class Paypal
 
     @makeAPIrequest @getParams(opts), (err, response) ->
 
-      return callback err, null if err
-
-      return callback err ? true, null if response["ACK"] isnt "Success"
-
-      callback err, response
+      if response['ACK'] is 'Failure'
+        callback response['L_LONGMESSAGE0']
+      else
+        callback null, response
 
   # Returns subscription information for an already created subscription by
   # invoking the "GetRecurringPaymentsProfileDetails" method in the PayPal API.
@@ -223,7 +222,7 @@ class Paypal
       if response['ACK'] is 'Failure'
         callback response['L_LONGMESSAGE0']
       else
-        callback null, response                  
+        callback null, response
 
   # Performs the actual API request to the PayPal API endpoint.
   #
