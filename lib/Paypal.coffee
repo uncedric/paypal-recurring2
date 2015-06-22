@@ -220,11 +220,10 @@ class Paypal
 
     @makeAPIrequest params, (err, response) ->
 
-      return callback err, null if err
-
-      return callback err ? true, null if response["ACK"] isnt "Success"
-
-      callback err, response
+      if response['ACK'] is 'Failure'
+        callback response['L_LONGMESSAGE0']
+      else
+        callback null, response                  
 
   # Performs the actual API request to the PayPal API endpoint.
   #

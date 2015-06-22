@@ -1,7 +1,8 @@
 # paypal-recurring
 This package makes integration of PayPal's recurring payments easier in your next project using `node.js`.
 
-## This package is a fork of [https://github.com/jaybryant/paypal-recurring](https://github.com/jaybryant/paypal-recurring)
+This package is a fork of [paypal-recurring](https://github.com/jaybryant/paypal-recurring)
+
 # Installation
 
 ```
