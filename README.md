@@ -1,55 +1,42 @@
-paypal-recurring
-============
-This package makes integration of PayPal's recurring payments easier in your next project using `node.js`.  
-This package will be featured in my upcoming book about building your next SaaS. More information to follow.
+# paypal-recurring
+This package makes integration of PayPal's recurring payments easier in your next project using `node.js`.
 
+## This package is a fork of [https://github.com/jaybryant/paypal-recurring](https://github.com/jaybryant/paypal-recurring)
+# Installation
 
-Installation
-============
-  
-    npm install paypal-recurring
+```
+npm install paypal-recurring2
+```
 
+# Introduction
+Integrating PayPal's recurring payments into your application to get paid can be confusing, but it only takes two steps to convert a user into a paying recurring customer of yours.
 
-Introduction
-============
-Integrating PayPal's recurring payments into your application to get paid can be confusing, but it only takes two steps to convert a user into a paying recurring
-customer of yours.
+Enter your own API credentials [(obtained here)](https://developer.paypal.com) in the demo application (`./examples/express`) and run it by entering this in your terminal:
 
-Enter your own API credentials [(obtained here)](https://developer.paypal.com)
-in the demo application (`./examples/express`) and run it by entering this
-in your terminal:
-  
-    make demo
+```
+make demo
+```
 
 If you want to read up on PayPal's API documentation for recurring billing, visit [this page](https://developer.paypal.com/webapps/developer/docs/classic/express-checkout/integration-guide/ECRecurringPayments/).
 
-
-###Introduction & converting users into customers
+## Introduction & converting users into customers
 Your user visits your node.js-driven website where you already have setup your environment by installing this package and passed your API credentials to the constructor of the class.
 
-By calling the `authenticate()` method, you'll get an unique URL from PayPal that you redirect your user to.
-Now at PayPal's website, your user either logs in to an existing account or creates a new one and then gets to accept your recurring payment agreement.
+By calling the `authenticate()` method, you'll get an unique URL from PayPal that you redirect your user to. Now at PayPal's website, your user either logs in to an existing account or creates a new one and then gets to accept your recurring payment agreement.
 
 PayPal then sends the user back to your website along with a unique token + customer id appended to the url as query strings. With this token and the payerid, you run the `createSubscription`-method and your user is now turned into a paying subscriber of yours.
 
-You can then use the `PROFILEID` that `createSubscription` returns on success
-to either fetch subscription information and remotely pause/cancel subscriptions from within your app in the future by using the `.getSubscription()` & `.modifySubscription()` -methods.
+You can then use the `PROFILEID` that `createSubscription` returns on success to either fetch subscription information and remotely pause/cancel subscriptions from within your app in the future by using the `.getSubscription()` & `.modifySubscription()` -methods.
 
-
-Documentation
-============
-
+# Documentation
 ## Constructor
-
-The constructor takes two arguments: `credentials` & `enviroment`.
-Username, password and signature for the credentials are all your [PayPal API credentials](https://developer.paypal.com)
+The constructor takes two arguments: `credentials` & `enviroment`. Username, password and signature for the credentials are all your [PayPal API credentials](https://developer.paypal.com)
 
 The default environment uses the PayPal Sandbox API to allow testing. When going live, pass `"production"` as a second parameter to the constructor. This will create real subscriptions, so use with care.
 
-
 ```js
 // Require the module and setup our instance of the class
-var Paypal = require('paypal-recurring'),
+var Paypal = require('paypal-recurring2'),
     paypal = new Paypal({
       username:  "info@example.com",
       password:  "****",
@@ -60,17 +47,15 @@ var Paypal = require('paypal-recurring'),
 ```
 
 ## .authenticate(options, callback)
-*(first step in the payment flow)*
+_(first step in the payment flow)_
 
-This method generates a unique url to authenticate the user through PayPal by calling the `SetExpressCheckout` action in the PayPal API.  
-You should redirect your user to the url that this method returns to allow the user to either login to an existing account or create a new one with PayPal.
+This method generates a unique url to authenticate the user through PayPal by calling the `SetExpressCheckout` action in the PayPal API.<br>You should redirect your user to the url that this method returns to allow the user to either login to an existing account or create a new one with PayPal.
 
 This method takes two arguments - `options` (object) and `callback` (fn).
 
 The options object must contain at least `RETURNURL`, `CANCELURL`, `PAYMENTREQUEST_0_AMT` & `L_BILLINGAGREEMENTDESCRIPTION0` for this API operation to be valid.
 
-Your callback will be passed three arguments upon API response; `error`, `data`
-& `url`.
+Your callback will be passed three arguments upon API response; `error`, `data` & `url`.
 
 **Example usage of `.authenticate()`:**
 
@@ -108,17 +93,12 @@ L_BILLINGAGREEMENTDESCRIPTION0: "A description of this subscription",
 L_BILLINGTYPE0:                 "RecurringPayments"
 ```
 
-**Note:** *Some of the parameters above are not explicitly specified in the
-arguments and are set as default inside the `SetExpressCheckout` method to suit
-most online subscription businesses. Override any of the defaults by including
-that key/value in the `options` hash.*
+**Note:** _Some of the parameters above are not explicitly specified in the arguments and are set as default inside the `SetExpressCheckout` method to suit most online subscription businesses. Override any of the defaults by including that key/value in the `options` hash._
 
-Please visit [this page](https://developer.paypal.com/webapps/developer/docs/classic/api/merchant/SetExpressCheckout_API_Operation_NVP/) for official PayPal API
-documentation of the `SetExpressCheckout` action to learn how you can customize the API call to suit your business.
-
+Please visit [this page](https://developer.paypal.com/webapps/developer/docs/classic/api/merchant/SetExpressCheckout_API_Operation_NVP/) for official PayPal API documentation of the `SetExpressCheckout` action to learn how you can customize the API call to suit your business.
 
 ## .createSubscription(token, payerid, options, callback)
-*(final step in the payment flow)*
+_(final step in the payment flow)_
 
 After calling `.authenticate()` the user is now back on your server at the `RETURNURL` you specified with both `token` and `payerid` appended to the URL as querystrings.
 
@@ -133,7 +113,6 @@ The start date of the payment profile is automatically set and converted into IS
 Your callback function will be passed two arguments upon API response; `error` & `data`.
 
 **Example usage of `.createSubscription()`:**
-
 
 ```js
 // Create a subscription of 10 USD every month
@@ -168,12 +147,9 @@ BILLINGPERIOD:    "Month",
 BILLINGFREQUENCY: 1
 ```
 
-Please visit [this page](https://developer.paypal.com/webapps/developer/docs/classic/api/merchant/CreateRecurringPaymentsProfile_API_Operation_NVP/)
-for official PayPal API documentation of the `CreateRecurringPaymentsProfile` action to learn how you can customize the API call to suit your business.
-
+Please visit [this page](https://developer.paypal.com/webapps/developer/docs/classic/api/merchant/CreateRecurringPaymentsProfile_API_Operation_NVP/) for official PayPal API documentation of the `CreateRecurringPaymentsProfile` action to learn how you can customize the API call to suit your business.
 
 ## .getSubscription(profileid, callback)
-
 To fetch information about a payment profile of one of your customers, call the `.getSubscription` method with the `PROFILEID` that was returned when you invoked `.createSubscription`.
 
 This method takes two arguments: `profileid` (string) & `callback` (fn).
@@ -185,18 +161,15 @@ paypal.getSubscription('subscriptionid', function(err, data) {
   if (!err) { console.log(data)}
 });
 ```
-Please visit [this page](https://developer.paypal.com/webapps/developer/docs/classic/api/merchant/GetRecurringPaymentsProfileDetails_API_Operation_NVP/)
-for official PayPal API documentation of the `GetRecurringPaymentsProfileDetails` action.
 
+Please visit [this page](https://developer.paypal.com/webapps/developer/docs/classic/api/merchant/GetRecurringPaymentsProfileDetails_API_Operation_NVP/) for official PayPal API documentation of the `GetRecurringPaymentsProfileDetails` action.
 
 ## .modifySubscription(profileid, action, callback)
-
 To remotely modify subscriptions - cancel, suspend and reactivate subscriptions you can use the `.modifySubscription`-method.
 
-It takes four arguments: `profileid` (string), `action` (string), `note` (string) & `callback` (fn). 
+It takes four arguments: `profileid` (string), `action` (string), `note` (string) & `callback` (fn).
 
-Action may be either `cancel`, `suspend` or `reactivate`.  
-The note argument is optional and can be left out if you doesn't need to send an note along with the payment profile status change to your customer.
+Action may be either `cancel`, `suspend` or `reactivate`.<br>The note argument is optional and can be left out if you doesn't need to send an note along with the payment profile status change to your customer.
 
 Your callback function will be passed two arguments upon API response; `error` & `data`.
 
@@ -205,46 +178,34 @@ paypal.modifySubscription('subscriptionid', 'Cancel' , function(err, data) {
   if (!err) { res.send "Your subscription was cancelled" }
 });
 ```
-Please visit [this page](https://developer.paypal.com/webapps/developer/docs/classic/api/merchant/ManageRecurringPaymentsProfileStatus_API_Operation_NVP/)
-for official PayPal API documentation of the `ManageRecurringPaymentsProfileStatus` action.
 
-Pitfalls
-============
+Please visit [this page](https://developer.paypal.com/webapps/developer/docs/classic/api/merchant/ManageRecurringPaymentsProfileStatus_API_Operation_NVP/) for official PayPal API documentation of the `ManageRecurringPaymentsProfileStatus` action.
 
-###Different subtotals/descriptions
-
+# Pitfalls
+## Different subtotals/descriptions
 If your description and/or subtotal differs between what you enter when calling `authenticate` & `createSubscription`, PayPal may deny your API call.
 
-###Trial periods
+## Trial periods
+If you want to provide a proper free trial period _before_ any billing is done, avoid using any of the billing fields (`TRIALBILLINGPERIOD` etc) when calling the `createSubscription` method.
 
-If you want to provide a proper free trial period *before* any billing is done, avoid using any of the billing fields (`TRIALBILLINGPERIOD` etc) when calling the `createSubscription` method.
+Instead, make sure to set the `PROFILESTARTDATE` ahead in time according to when you want the _first_ billing to occur:
 
-Instead, make sure to set the `PROFILESTARTDATE` ahead in time according to when you want the *first* billing to occur:
+```
+var d = new Date()
+d.setMonth(d.getMonth()+1)
+```
 
-    var d = new Date()
-    d.setMonth(d.getMonth()+1)
-
-
-Development
-============
-
+# Development
 Feel free to go wild if you are missing any features in this package. Just make sure to write proper tests and that they pass:
-  
-    make test
 
+```
+make test
+```
 
-Changelog
-============
-
+# Changelog
 **v1.1.0:**
+- The class does now validates API results to keep you from writing `if (response["ACK"] === "Success")` to manually validate every API action.
+- Every API action is now tunneled through the `makeAPIrequest()`-method to make it easy to debug/unit test the class when integrating with your own code.
 
-* The class does now validates API results to keep you from writing `if (response["ACK"] === "Success")` to manually validate every API action.
-
-* Every API action is now tunneled through the `makeAPIrequest()`-method to make it easy to debug/unit test the class when integrating with your own code.
-
-
-License
-============
-
-MIT license. See the `LICENSE` file for details.  
-Copyright (c) 2013 Jay Bryant. All rights reserved.
+# License
+MIT license. See the `LICENSE` file for details.<br>Copyright (c) 2013 Jay Bryant. All rights reserved.
