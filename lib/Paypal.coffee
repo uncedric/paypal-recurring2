@@ -170,12 +170,15 @@ class Paypal
   getSubscription: (id, callback) ->
 
     # Ensure that we have a profile ID
-    throw new Error "Missing profile id" unless id
+    # throw new Error "Missing profile id" unless id
+    return callback 'Missing profile id' unless id
 
     params = @getParams(
       METHOD:    "GetRecurringPaymentsProfileDetails"
       PROFILEID: id
     )
+
+
 
     @makeAPIrequest params, (err, response) ->
 
@@ -200,7 +203,8 @@ class Paypal
   modifySubscription: (id, action, note, callback) ->
 
     # Ensure that we have a profile ID
-    throw new Error "Missing profile id" unless id
+    # throw new Error "Missing profile id" unless id
+    return callback 'Missing profile id' unless id
 
     args =     Array::slice.call(arguments)
     callback = args[args.length-1]
