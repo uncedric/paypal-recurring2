@@ -5,7 +5,7 @@
   "contributors": [
     "Cedric Luckie <cedric.luckie+github@gmail.com>"
   ],
-  "version":      "1.1.4",
+  "version":      "1.1.5",
   "repository":   "git@github.com:uncedric/paypal-recurring2.git",
   "license":      "MIT",
   "main":         "index",

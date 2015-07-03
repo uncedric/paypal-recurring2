@@ -13,9 +13,6 @@ util =        require 'util'
 #
 # If you don't already have those at hands, visit https://developer.paypal.com
 #
-# For general documentation, visit;
-# * https://www.x.com/developers/paypal/documentation-tools/express-checkout/integration-guide/ECRecurringPayments
-# * https://www.x.com/developers/paypal/documentation-tools/api
 #
 class Paypal
 
@@ -28,7 +25,7 @@ class Paypal
 
     @apiVersion = 94
 
-    if env is "production"
+    if env is true
       @endpointUrl = "https://api-3t.paypal.com/nvp"
       @checkoutUrl = "https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token="
     else
