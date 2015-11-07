@@ -12,11 +12,14 @@ npm install paypal-recurring2
 # Introduction
 Integrating PayPal's recurring payments into your application to get paid can be confusing, but it only takes two steps to convert a user into a paying recurring customer of yours.
 
-Enter your own API credentials [(obtained here)](https://developer.paypal.com) in the demo application (`./examples/express`) and run it by entering this in your terminal:
+Enter your own API credentials in the demo application (`./examples/express`) and run it by entering this in your terminal:
 
 ```
 make demo
 ```
+
+## Obtaining API credentials
+To obtain your credentials for production [first login with your Paypal account](https://www.paypal.com/signin/?returnUri=https%3A%2F%2Fdeveloper.paypal.com%2F) then go to [this page](https://www.paypal.com/us/cgi-bin/webscr?cmd=_profile-api-signature). Credentials for testing are in [in this seemingly unrelated page](https://developer.paypal.com/developer/accounts).
 
 If you want to read up on PayPal's API documentation for recurring billing, visit [this page](https://developer.paypal.com/webapps/developer/docs/classic/express-checkout/integration-guide/ECRecurringPayments/).
 
