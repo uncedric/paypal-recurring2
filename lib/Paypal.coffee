@@ -145,10 +145,10 @@ class Paypal
 
     @makeAPIrequest @getParams(opts), (err, response) ->
 
-      if response['ACK'] is 'Failure'
+      if response and response['ACK'] is 'Failure'
         callback response['L_LONGMESSAGE0']
       else
-        callback null, response
+        callback err, response
 
   # Returns subscription information for an already created subscription by
   # invoking the "GetRecurringPaymentsProfileDetails" method in the PayPal API.
@@ -175,14 +175,12 @@ class Paypal
       PROFILEID: id
     )
 
-
-
     @makeAPIrequest params, (err, response) ->
 
-      if response['ACK'] is 'Failure'
+      if response and response['ACK'] is 'Failure'
         callback response['L_LONGMESSAGE0']
       else
-        callback null, response
+        callback err, response
 
   # Modifies the state of an existing subscription by invoking the
   # ManageRecurringPaymentsProfileStatus on the PayPal API.
@@ -220,10 +218,10 @@ class Paypal
 
     @makeAPIrequest params, (err, response) ->
 
-      if response['ACK'] is 'Failure'
+      if response and response['ACK'] is 'Failure'
         callback response['L_LONGMESSAGE0']
       else
-        callback null, response
+        callback err, response
 
   # Performs the actual API request to the PayPal API endpoint.
   #
