@@ -145,7 +145,7 @@ class Paypal
 
     @makeAPIrequest @getParams(opts), (err, response) ->
 
-      if response['ACK'] is 'Failure'
+      if response and response['ACK'] is 'Failure'
         callback response['L_LONGMESSAGE0']
       else
         callback err, response
@@ -175,11 +175,9 @@ class Paypal
       PROFILEID: id
     )
 
-
-
     @makeAPIrequest params, (err, response) ->
 
-      if response['ACK'] is 'Failure'
+      if response and response['ACK'] is 'Failure'
         callback response['L_LONGMESSAGE0']
       else
         callback err, response
@@ -220,7 +218,7 @@ class Paypal
 
     @makeAPIrequest params, (err, response) ->
 
-      if response['ACK'] is 'Failure'
+      if response and response['ACK'] is 'Failure'
         callback response['L_LONGMESSAGE0']
       else
         callback err, response
