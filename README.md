@@ -36,7 +36,7 @@ You can then use the `PROFILEID` that `createSubscription` returns on success to
 ## Constructor
 The constructor takes two arguments: `credentials` & `enviroment`. Username, password and signature for the credentials are all your [PayPal API credentials](https://developer.paypal.com)
 
-The default environment uses the PayPal Sandbox API to allow testing. When going live, pass `"production"` as a second parameter to the constructor. This will create real subscriptions, so use with care.
+The default environment uses the PayPal Sandbox API to allow testing. When going live, pass `true` as a second parameter to the constructor (previously you should have passed `"production"`, but this isn't valid anymore, please pass `true`). This will create real subscriptions, so use with care.
 
 ```js
 // Require the module and setup our instance of the class
@@ -46,7 +46,7 @@ var Paypal = require('paypal-recurring2'),
       password:  "****",
       signature: "****",
     }
-    //, "production" // USE WITH CARE!
+    //, true // USE WITH CARE!
     );
 ```
 
